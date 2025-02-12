@@ -1,0 +1,254 @@
+openapi: 3.0.0
+info:
+  title: Cart API
+  version: 1.0.0
+paths:
+  /api/v1/carts/{id}:
+    get:
+      tags:
+        - Cart
+      summary: Get Cart REST API
+      operationId: findByUserId
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: correlationId
+          in: header
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+
+    delete:
+      tags:
+        - Cart
+      summary: Delete Cart REST API
+      operationId: deleteCart
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: correlationId
+          in: header
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+
+  /api/v1/carts/{id}/items:
+    put:
+      tags:
+        - Cart
+      summary: Add CartItem REST API
+      operationId: addCartItem
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: correlationId
+          in: header
+          required: false
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CartItem'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+
+  /api/v1/carts/{id}/items/{productId}:
+    delete:
+      tags:
+        - Cart
+      summary: Remove CartItem REST API
+      operationId: removeItem
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: correlationId
+          in: header
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+
+  /api/v1/carts/{id}/items/{productId}/quantity:
+    put:
+      tags:
+        - Cart
+      summary: Update Product Quantity REST API
+      operationId: updateProductQuantity
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: correlationId
+          in: header
+          required: false
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductQuantityRequest'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+
+  /api/v1/carts/{id}/address:
+    put:
+      tags:
+        - Cart
+      summary: Update Location REST API
+      operationId: updateAddress
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: correlationId
+          in: header
+          required: false
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateAddressDto'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+
+components:
+  schemas:
+    Cart:
+      type: object
+      properties:
+        userId:
+          type: integer
+          format: int64
+          example: 1
+        address:
+          type: string
+          example: "Marksova 17, Veles"
+        totalPrice:
+          type: integer
+          format: int32
+          example: 420
+        cartItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/CartItem'
+    CartItem:
+      type: object
+      properties:
+        product:
+          $ref: '#/components/schemas/ProductDto'
+        quantity:
+          type: integer
+          format: int32
+          example: 3
+    ProductDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: "Snikers"
+        description:
+          type: string
+          example: "Chocolate bar"
+        productCategory:
+          $ref: '#/components/schemas/ProductCategory'
+        price:
+          type: integer
+          format: int32
+          example: 140
+    ProductCategory:
+      type: string
+      enum:
+        - "ELECTRONICS"
+        - "FOOD"
+        - "DRINKS"
+    ProductQuantityRequest:
+      type: object
+      properties:
+        quantity:
+          type: integer
+          format: int32
+          example: 5
+    UpdateAddressDto:
+      type: object
+      properties:
+        address:
+          type: string
+          example: "Marksova 17, Veles"
+

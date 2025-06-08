@@ -51,7 +51,7 @@ paths:
           description: Successful operation
 
   /api/v1/carts/{id}/items:
-    put:
+    post:
       tags:
         - Cart
       summary: Add CartItem REST API
@@ -115,7 +115,7 @@ paths:
                 $ref: '#/components/schemas/Cart'
 
   /api/v1/carts/{id}/items/{productId}/quantity:
-    put:
+    post:
       tags:
         - Cart
       summary: Update Product Quantity REST API
